@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RoamConvertUtil {
 	
-	private static Map<String, Integer> roamMap;
+	private static Map<String, Integer> romanMap;
 	
 	static {
         Map<String, Integer> intMap = new HashMap<String, Integer>();
@@ -20,46 +20,41 @@ public class RoamConvertUtil {
         intMap.put("C", 100);
         intMap.put("D", 500);
         intMap.put("M", 1000);
-        roamMap = Collections.unmodifiableMap(intMap);
+        romanMap = Collections.unmodifiableMap(intMap);
     }
 	
     /**
      * 根據羅馬數字規則，一次取兩位處理
      * 
+     * MCMXCIV 1994
+     * MCDLXXVI 1476
+     * 
      * @param roamStr 羅馬數字
      * @return 阿拉伯數字
      * @throws Exception 非標準羅馬數字
      */
-    public static int convert(String roamStr) throws Exception {
+    public static int convert(String romanStr) throws Exception {
     	int result = 0;
     	
-    	char[] roamChar = roamStr.toUpperCase().toCharArray();
-    	int size = roamChar.length;
-    	try {
-    		for(int i = 0; i < size; i = i + 2) {
-        		char c1 = roamChar[i];
-        		char c2 = i + 1 < size ? roamChar[i+1]: Character.MIN_VALUE;
-        		
-        		Integer i1 = roamMap.get(String.valueOf(c1));
-        		Integer i2 = 0;
-        		if (c2 != Character.MIN_VALUE) {
-        			i2 = roamMap.get(String.valueOf(c2));
-        		}
-        		
-        		Integer tmp = 0;
-        		if(i1 < i2) {
-        			tmp = i2 - i1;
-        		}
-        		else {
-        			tmp = i2 + i1;
-        		}
-        		
-        		result = result + tmp;
-        	}
-    	} catch (Exception e) {
-    		System.out.println(e.getMessage());
-    		throw new Exception("Not a valid Roam");
-    	}    	
+    	char[] romanChar = romanStr.toUpperCase().toCharArray();
+    	int size = romanChar.length;
+    	
+		for (int i = 0; i < size; i++) {
+			Integer i1 = romanMap.get(String.valueOf(romanChar[i]));
+			
+			if (i != size - 1) {
+				Integer i2 = romanMap.get(String.valueOf(romanChar[i + 1]));
+				if (i1 >= i2) {
+					result += i1;
+				} else {
+					result += i2 - i1;
+					i++;
+				}
+			} else {
+				result += i1;
+			}
+
+		}
     	
         return result;
     }
