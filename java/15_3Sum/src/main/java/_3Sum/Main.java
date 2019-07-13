@@ -23,9 +23,9 @@ public class Main {
 		List<List<Integer>> result = new ArrayList<List<Integer>>();
 		
 		for(int i = 0; i < nums.length; i++) {
-//			if(list.get(i) > 0) {
-//				break;
-//			}
+			if(nums[i] > 0) {
+				break;
+			}
 
 			if(i > 0 && nums[i] == nums[i - 1]) {
 				continue;
